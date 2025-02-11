@@ -76,78 +76,98 @@ Neuquen -> es palíndromo
 Opcionalmente, pueden agregar un argumento para las opciones de la función, como ignorar Mayúsculas/minúsculas o símbolos.
 */
 
-#define CADENA_SIN_TERMINADOR -1
+#define CADENA_MENOR 1
+#define CADENA_IGUAL 2
+#define CADENA_MAYOR 3
+#define TODO_OK 0
+#define CADENA_NULA -1
+#define SIN_LUGAR_SUFICIENTE -2
+#define CAPACIDAD_INCORRECTA -3
+#define POSICION_INVALIDA -4
+#define CAPACIDAD_INSUFICIENTE -5
+#define CADENA_SIN_TERMINADOR -6
+
+void imprimir_codigos_error(int codigo)
+{
+	switch(codigo)
+	{
+		case TODO_OK:
+		printf("Codigo 0, no hay errores\n");
+		break;
+		case CADENA_NULA:
+		printf("Error: Una de las cadenas es nula\n");
+		break;
+		case SIN_LUGAR_SUFICIENTE:
+		printf("Error: no hay lugar suficiente en la cadena de destino\n");
+		break;
+		case CAPACIDAD_INCORRECTA:
+		printf("Error: la capacidad del arreglo es incorrecta\n");
+		break;
+		case POSICION_INVALIDA:
+		printf("Error: La posicion seleccionada es invalida\n");
+		break;
+		case CAPACIDAD_INSUFICIENTE:
+		printf("Error: La capacidad de la cadena es insuficiente\n");
+		break;
+		case CADENA_SIN_TERMINADOR:
+		printf("Error: La cadena no posee terminador\n");
+		break;
+	}
+}
 
 int largo_seguro(char cadena[], int capacidad)
 {
 	int largo_cadena = 0;
-	for (int i = 0; i < capacidad; i++)
+	while (largo_cadena <= capacidad && cadena[largo_cadena] != '\0')
 	{
-		if (cadena[i] != '\0')
-		{
-			largo_cadena += 1;
-		} else if (cadena[i] == '\0') {
-			return largo_cadena;
-		}
-	}
-	if (largo_cadena <= capacidad)
+		largo_cadena++;
+	}//hay que arreglar la deteccion de falta de terminador en cadenas de la funcion
+	if (largo_cadena == capacidad)
 	{
-		return CADENA_SIN_TERMINADOR;
+		largo_cadena = CADENA_SIN_TERMINADOR;
 	}
+	return largo_cadena;
 }
 
-int copia_segura(char cad_origen[], char cad_destino[], int cap_origen, int cap_destino)
+int copia(char cad_origen[], char cad_destino[], int cap_origen, int cap_destino)
 {
-	int inicio = 0;
-	int espacio_vacio = 0;
+	int codigo;
 	if (cad_origen == NULL || cad_destino == NULL)
 	{
-		return -2;
+		codigo = CADENA_NULA; 
 	}
-	if (cad_destino[cap_destino - 1] != '\0' || cad_origen[cap_origen - 1] != '\0')
+	if (cad_destino[cap_destino] != '\0' || cad_origen[cap_origen] != '\0')
 	{
-		return CADENA_SIN_TERMINADOR;
+		codigo = CADENA_SIN_TERMINADOR;
 	}
-	for (int i = 0; i < cap_destino; i++)
+	for (int i = 0; i < cap_destino && cad_destino[i] != '\0'; i++)
 	{
-		if (cad_destino[i] == ' ')
-		{
-			espacio_vacio += 1;
-			if (inicio == 0)
-			{
-				inicio = i;
-			}
-		}
+		cad_destino[i] = cad_origen[i];
 	}
-	if (espacio_vacio < cap_origen)
+	if (cad_origen[0] == cad_destino[0] && cad_destino[cap_destino] == '\0')
 	{
-		return -2;
-	} else {
-		int contador_origen = 0;
-		for (int i = inicio; i < cap_destino; i++)
-		{
-			cad_destino[i] = cad_origen[contador_origen];
-			contador_origen++;
-		}
-		return 0;
+		codigo = TODO_OK;
 	}
+	return codigo;
 }
 
 int main()
 {
 	char cad1[] = "holajuan";
-	char cad2[] = "paracuando         ";
+	char cad2[] = "-------------------";
 	int retorno = largo_seguro(cad1, 9);
+	imprimir_codigos_error(retorno);
 	if (retorno >= 0)
 	{
 		printf("La cadena es segura y su largo es: %d\n", retorno);
 	}
-	else if (retorno == CADENA_SIN_TERMINADOR)
+	retorno = copia(cad1, cad2, 9, 21);
+	imprimir_codigos_error(retorno);
+	if (retorno == 0)
 	{
-		printf("Error: cadena insegura\n");
+		printf("La copia a la cadena destino es: %s\n", cad2);
 	}
-	retorno = copia_segura(cad1, cad2, 9, 20);
-	switch(retorno)
+	/*switch(retorno)
 	{
 		case -2:
 		printf("Error: una de las cadenas ingresadas es nula\n");
@@ -156,6 +176,6 @@ int main()
 		printf("Error: Una de las cadenas no tiene terminador\n");
 		break;
 		case 0:
-		printf("La cadena combinada es %s\n", cad2);
-	}
+		printf("La copia a la cadena destino es: %s\n", cad2);
+	}*/
 }
