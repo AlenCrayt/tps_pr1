@@ -80,10 +80,82 @@ Opcionalmente, pueden agregar un argumento para las opciones de la función, com
 
 int largo_seguro(char cadena[], int capacidad)
 {
+	int largo_cadena = 0;
+	for (int i = 0; i < capacidad; i++)
+	{
+		if (cadena[i] != '\0')
+		{
+			largo_cadena += 1;
+		} else if (cadena[i] == '\0') {
+			return largo_cadena;
+		}
+	}
+	if (largo_cadena <= capacidad)
+	{
+		return CADENA_SIN_TERMINADOR;
+	}
+}
 
+int copia_segura(char cad_origen[], char cad_destino[], int cap_origen, int cap_destino)
+{
+	int inicio = 0;
+	int espacio_vacio = 0;
+	if (cad_origen == NULL || cad_destino == NULL)
+	{
+		return -2;
+	}
+	if (cad_destino[cap_destino - 1] != '\0' || cad_origen[cap_origen - 1] != '\0')
+	{
+		return CADENA_SIN_TERMINADOR;
+	}
+	for (int i = 0; i < cap_destino; i++)
+	{
+		if (cad_destino[i] == ' ')
+		{
+			espacio_vacio += 1;
+			if (inicio == 0)
+			{
+				inicio = i;
+			}
+		}
+	}
+	if (espacio_vacio < cap_origen)
+	{
+		return -2;
+	} else {
+		int contador_origen = 0;
+		for (int i = inicio; i < cap_destino; i++)
+		{
+			cad_destino[i] = cad_origen[contador_origen];
+			contador_origen++;
+		}
+		return 0;
+	}
 }
 
 int main()
 {
-
+	char cad1[] = "holajuan";
+	char cad2[] = "paracuando         ";
+	int retorno = largo_seguro(cad1, 9);
+	if (retorno >= 0)
+	{
+		printf("La cadena es segura y su largo es: %d\n", retorno);
+	}
+	else if (retorno == CADENA_SIN_TERMINADOR)
+	{
+		printf("Error: cadena insegura\n");
+	}
+	retorno = copia_segura(cad1, cad2, 9, 20);
+	switch(retorno)
+	{
+		case -2:
+		printf("Error: una de las cadenas ingresadas es nula\n");
+		break;
+		case CADENA_SIN_TERMINADOR:
+		printf("Error: Una de las cadenas no tiene terminador\n");
+		break;
+		case 0:
+		printf("La cadena combinada es %s\n", cad2);
+	}
 }
