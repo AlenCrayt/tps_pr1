@@ -151,10 +151,63 @@ int copia(char cad_origen[], char cad_destino[], int cap_origen, int cap_destino
 	return codigo;
 }
 
+int insertar_cadena(char ingresada[], char receptora[], int pos, int cap_ing, int cap_rep)
+{ 
+	int codigo;
+	int largo_ing = largo_seguro(ingresada, cap_ing);
+	int largo_rep = largo_seguro(receptora, cap_rep);
+	if (largo_ing < 0 || largo_rep < 0)
+	{
+		codigo = CAPACIDAD_INCORRECTA;
+	} else if (largo_rep <= largo_ing) {
+		codigo = CAPACIDAD_INSUFICIENTE;
+	} else {
+		codigo = TODO_OK;
+	}/*agregar un condicional que evite que se haga la insercion de la cadena
+	 si el codigo no es TODO_OK*/
+	if (codigo >= TODO_OK)
+	{
+		for (int i = 0; i < largo_ing; i++)
+		{
+			receptora[pos] = ingresada[i];
+			pos++;
+		}
+		codigo = largo_rep;
+	}
+	return codigo;
+}
+
+int limpieza_cadena(char cad[], int cap)
+{
+	int codigo;
+	int largo = largo_seguro(cad, cap);
+	if (largo < TODO_OK)
+	{
+		codigo = CAPACIDAD_INSUFICIENTE;
+	} else {
+		codigo = TODO_OK;
+	}
+	if (codigo == TODO_OK)
+	{
+		for (int i = 0; i < cap; i++)
+		{
+			if (cad[i] >= 32 && cad[i] <= 47)
+			{
+				cad[i] = 'a';
+			}
+		}
+		codigo = largo;
+	}
+	return codigo;
+}
+
 int main()
 {
 	char cad1[] = "holajuan";
 	char cad2[] = "-------------------";
+	char cad3[] = "david";
+	char cad4[] = "peladomartinezennightcity";
+	char cad5[] = "t!o!/(.d!o";
 	int retorno = largo_seguro(cad1, 9);
 	imprimir_codigos_error(retorno);
 	if (retorno >= 0)
@@ -163,19 +216,20 @@ int main()
 	}
 	retorno = copia(cad1, cad2, 9, 21);
 	imprimir_codigos_error(retorno);
-	if (retorno == 0)
+	if (retorno == TODO_OK)
 	{
 		printf("La copia a la cadena destino es: %s\n", cad2);
 	}
-	/*switch(retorno)
+	retorno = insertar_cadena(cad3, cad4, 10, 6, 27);
+	imprimir_codigos_error(retorno);
+	if (retorno >= TODO_OK)
 	{
-		case -2:
-		printf("Error: una de las cadenas ingresadas es nula\n");
-		break;
-		case CADENA_SIN_TERMINADOR:
-		printf("Error: Una de las cadenas no tiene terminador\n");
-		break;
-		case 0:
-		printf("La copia a la cadena destino es: %s\n", cad2);
-	}*/
+		printf("%s\n", cad4);
+	}
+	retorno = limpieza_cadena(cad5, 11);
+	if (retorno >= TODO_OK)
+	{
+		printf("Cadena limpia: %s\n", cad5);
+	}
+	return 0;
 }
