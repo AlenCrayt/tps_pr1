@@ -177,10 +177,11 @@ int insertar_cadena(char ingresada[], char receptora[], int pos, int cap_ing, in
 	return codigo;
 }
 
-int limpieza_cadena(char cad[], int cap)
+int limpieza_cadena(char origen[], char destino[], int cap_o, int cap_d)
 {
 	int codigo;
-	int largo = largo_seguro(cad, cap);
+	int x = 0;
+	int largo = largo_seguro(origen, cap_o);
 	if (largo < TODO_OK)
 	{
 		codigo = CAPACIDAD_INSUFICIENTE;
@@ -189,11 +190,12 @@ int limpieza_cadena(char cad[], int cap)
 	}
 	if (codigo == TODO_OK)
 	{
-		for (int i = 0; i < cap; i++)
+		for (int i = 0; i < cap_o; i++)
 		{
-			if (cad[i] >= 32 && cad[i] <= 47)
+			if (origen[i] >= 48 && origen[i] <= 57 || origen[i] >= 65 && origen[i] <= 90 || origen[i] >= 97 && origen[i] <= 122 )
 			{
-				cad[i] = 'a';
+				destino[x] = origen[i];
+				x++;
 			}
 		}
 		codigo = largo;
@@ -201,13 +203,52 @@ int limpieza_cadena(char cad[], int cap)
 	return codigo;
 }
 
+int ordenamiento(char cad1[], char cad2[], int cap1, int cap2)
+{
+	int codigo;
+	int iguales = 0;
+	int mayor = 0;
+	int menor = 0;
+	int largo = largo_seguro(cad1, cap1);
+	imprimir_codigos_error(largo);
+	largo = largo_seguro(cad2, cap2);
+	imprimir_codigos_error(largo);
+	if(largo >= TODO_OK)
+	{
+		for (int i = 0; i < cap1; i++)
+		{
+			if (cad1[i] != '\0')
+			{
+				if (cad1[i] == cad2[i])
+				{
+					iguales += 1;
+				}//crear tres enteros diferentes que lleven cuenta de cual cadena es mayor o si son iguales?
+				if (cad1[i] > cad2[i])
+				{
+					mayor += 1;
+				}
+				if (cad2[i] > cad1[i])
+				{
+					menor += 1;
+				}
+			}
+		}
+		if (iguales == (cap1 - 1))
+		{
+			codigo = TODO_OK;
+		}
+	}
+	return codigo;
+}
 int main()
 {
 	char cad1[] = "holajuan";
 	char cad2[] = "-------------------";
 	char cad3[] = "david";
 	char cad4[] = "peladomartinezennightcity";
-	char cad5[] = "t!o!/(.d!o";
+	char cad5[] = "t!o!/(.d!o57¿H";
+	char cad6[] = "----------";
+	char cad7[] = "david";
 	int retorno = largo_seguro(cad1, 9);
 	imprimir_codigos_error(retorno);
 	if (retorno >= 0)
@@ -226,10 +267,16 @@ int main()
 	{
 		printf("%s\n", cad4);
 	}
-	retorno = limpieza_cadena(cad5, 11);
+	retorno = limpieza_cadena(cad5, cad6, 16, 11);
+	imprimir_codigos_error(retorno);
 	if (retorno >= TODO_OK)
 	{
-		printf("Cadena limpia: %s\n", cad5);
+		printf("Cadena limpia con un largo de %d: %s\n", retorno, cad6);
 	}
-	return 0;
+	retorno = ordenamiento(cad3, cad7, 6, 6);
+	if (retorno == TODO_OK)
+	{
+		printf("Las cadenas son iguales\n");
+	}
+	return TODO_OK;
 }
