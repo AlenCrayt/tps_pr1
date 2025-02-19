@@ -205,7 +205,7 @@ int limpieza_cadena(char origen[], char destino[], int cap_o, int cap_d)
 
 int ordenamiento(char cad1[], char cad2[], int cap1, int cap2)
 {
-	int codigo;
+	int codigo = 0;
 	int iguales = 0;
 	int mayor = 0;
 	int menor = 0;
@@ -233,9 +233,18 @@ int ordenamiento(char cad1[], char cad2[], int cap1, int cap2)
 				}
 			}
 		}
+		//printf("mayor: %d, menor %d, iguales: %d\n", mayor, menor, iguales);
 		if (iguales == (cap1 - 1))
 		{
-			codigo = TODO_OK;
+			codigo = CADENA_IGUAL;
+		}
+		if (mayor > menor)
+		{
+			codigo = CADENA_MAYOR;
+		}
+		if (menor > mayor)
+		{
+			codigo = CADENA_MENOR;
 		}
 	}
 	return codigo;
@@ -274,9 +283,17 @@ int main()
 		printf("Cadena limpia con un largo de %d: %s\n", retorno, cad6);
 	}
 	retorno = ordenamiento(cad3, cad7, 6, 6);
-	if (retorno == TODO_OK)
+	switch (retorno)
 	{
+		case CADENA_IGUAL:
 		printf("Las cadenas son iguales\n");
+		break;
+		case CADENA_MAYOR:
+		printf("La cadena 1 es mayor a la 2 alfabeticamente\n");
+		break;
+		case CADENA_MENOR:
+		printf("La cadena 2 es mayor a la 1 alfabeticamente\n");
+		break;
 	}
 	return TODO_OK;
 }
