@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 /*
 Manipular un arreglo de manera segura es poder limitar la cantidad de posiciones que serán recorridas en el caso de que la cadena de caracteres no cuente con su carácter de terminación (\0).
 
@@ -205,15 +206,14 @@ int limpieza_cadena(char origen[], char destino[], int cap_o, int cap_d)
 
 int ordenamiento(char cad1[], char cad2[], int cap1, int cap2)
 {
-	int codigo = 0;
 	int iguales = 0;
 	int mayor = 0;
 	int menor = 0;
-	int largo = largo_seguro(cad1, cap1);
-	imprimir_codigos_error(largo);
-	largo = largo_seguro(cad2, cap2);
-	imprimir_codigos_error(largo);
-	if(largo >= TODO_OK)
+	int codigo = largo_seguro(cad1, cap1);
+	imprimir_codigos_error(codigo);
+	codigo = largo_seguro(cad2, cap2);
+	imprimir_codigos_error(codigo);
+	if(codigo >= TODO_OK)
 	{
 		for (int i = 0; i < cap1; i++)
 		{
@@ -249,6 +249,63 @@ int ordenamiento(char cad1[], char cad2[], int cap1, int cap2)
 	}
 	return codigo;
 }
+
+int minusculas(char cad[], int cap)
+{
+	int codigo = largo_seguro(cad, cap);
+	if (codigo >= TODO_OK)
+	{
+		for (int i = 0; i < cap; i++)
+		{
+			if (cad[i] >= 65 && cad[i] <= 90)
+			{
+				cad[i] = cad[i] + 32;
+			}
+		}
+		codigo = TODO_OK;
+	}
+	return codigo;
+}
+
+bool palindromo(char cad[], int cap)
+{
+	bool pali = false;
+	int codigo = largo_seguro(cad, cap);
+	if (codigo >= TODO_OK)
+	{
+		int resta = 0;
+		if (cap % 2 == 0)
+		{
+			resta = 2;
+		}
+		else
+		{
+			resta = 1;
+		}
+		int es_palindromo = 0;
+		int x = (cap - 2);
+		int largo = (cap - resta);
+		printf("%d\n", largo);
+		for (int i = 0; i < (largo / 2); i++)
+		{
+			if (cad[i] == cad[x])
+			{
+				es_palindromo += 1;
+			}
+			x--;
+		}
+		if ((largo / 2) == es_palindromo)
+		{
+			pali = true;
+		}
+		else
+		{
+			pali = false;
+		}
+	}
+	return pali;
+}
+
 int main()
 {
 	char cad1[] = "holajuan";
@@ -257,7 +314,8 @@ int main()
 	char cad4[] = "peladomartinezennightcity";
 	char cad5[] = "t!o!/(.d!o57¿H";
 	char cad6[] = "----------";
-	char cad7[] = "david";
+	char cad7[] = "ALOHA";
+	char cad8[] = "NEUQUEN";
 	int retorno = largo_seguro(cad1, 9);
 	imprimir_codigos_error(retorno);
 	if (retorno >= 0)
@@ -294,6 +352,21 @@ int main()
 		case CADENA_MENOR:
 		printf("La cadena 2 es mayor a la 1 alfabeticamente\n");
 		break;
+	}
+	retorno = minusculas(cad7, 6);
+	imprimir_codigos_error(retorno);
+	if (retorno == TODO_OK)
+	{
+		printf("%s\n", cad7);
+	}
+	bool respuesta = palindromo(cad8, 8);
+	if (respuesta == true)
+	{
+		printf("La cadena: %s es palindromo\n", cad8);
+	}
+	else
+	{
+		printf("La cadena: %s no es palindromo\n", cad8);
 	}
 	return TODO_OK;
 }
