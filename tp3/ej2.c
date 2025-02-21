@@ -285,7 +285,7 @@ bool palindromo(char cad[], int cap)
 		int es_palindromo = 0;
 		int x = (cap - 2);
 		int largo = (cap - resta);
-		printf("%d\n", largo);
+		codigo = minusculas(cad, cap);
 		for (int i = 0; i < (largo / 2); i++)
 		{
 			if (cad[i] == cad[x])
@@ -315,7 +315,7 @@ int main()
 	char cad5[] = "t!o!/(.d!o57¿H";
 	char cad6[] = "----------";
 	char cad7[] = "ALOHA";
-	char cad8[] = "NEUQUEN";
+	char cad8[] = "Anilina";
 	int retorno = largo_seguro(cad1, 9);
 	imprimir_codigos_error(retorno);
 	if (retorno >= 0)
